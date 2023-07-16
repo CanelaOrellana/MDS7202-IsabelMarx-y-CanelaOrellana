@@ -4,23 +4,20 @@ generated using Kedro 0.18.11
 """
 
 import logging
+import time
+from typing import Dict
 
 import mlflow
 import pandas as pd
-from sklearn.metrics import mean_absolute_error
-from sklearn.linear_model import LinearRegression
+from lightgbm import LGBMRegressor
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
 from sklearn.svm import SVR
 from xgboost import XGBRegressor
-from lightgbm import LGBMRegressor
 
 
-from typing import Dict
-
-import pandas as pd
-
-
-def split_data(data: pd.DataFrame, params: dict):
+def split_data(data: pd.DataFrame, params: Dict):
 
     shuffled_data = data.sample(frac=1, random_state=params["random_state"])
     rows = shuffled_data.shape[0]
@@ -53,59 +50,84 @@ def get_best_model(experiment_id):
 
 
 # TODO: completar train_model
-def train_model(X_train,y_train,X_valid,y_valid):
+def train_model(X_train, y_train, X_valid, y_valid):
     LR = LinearRegression()
     RF = RandomForestRegressor()
     SVM = SVR()
     XGB = XGBRegressor()
     LGBMR = LGBMRegressor()
 
-    id_train = mlflow.create_experiment("experimento_train")
-    mlflow.autolog() # registrar automáticamente información del entrenamiento
-    #Linear Regression
-    with mlflow.start_run(run_name="run LR", experiment_id=id_train): # delimita inicio y fin del run
-        # aquí comienza el run
-        LR.fit(X_train, y_train) # train the model
-        y_pred = LR.predict(X_valid) # Use the model to make predictions on the test dataset.
-        valid_mae = mean_absolute_error(y_valid,y_pred)
+    # se utilizará el tiempo para diferenciar las carpetas de experimentos
+    t = time.localtime()
+    d = t.tm_mday
+    h = t.tm_hour
+    m = t.tm_min
+
+    id_train = mlflow.create_experiment(f"experimento_train [{d}|{h}:{m}]")
+    mlflow.autolog()  # registrar automáticamente información del entrenamiento
+    # Linear Regression
+    with mlflow.start_run(
+        run_name="run LR", experiment_id=id_train
+    ):  # delimita inicio y fin del run
+        # aquí comienza el run
+        LR.fit(X_train, y_train)  # train the model
+        y_pred = LR.predict(
+            X_valid
+        )  # Use the model to make predictions on the test dataset.
+        valid_mae = mean_absolute_error(y_valid, y_pred)
         mlflow.log_metric("valid_mae", valid_mae)
         # aquí termina el run
-    #Random Forest
-    with mlflow.start_run(run_name="run RF", experiment_id=id_train): # delimita inicio y fin del run
-        # aquí comienza el run
-        RF.fit(X_train, y_train) # train the model
-        y_pred = RF.predict(X_valid) # Use the model to make predictions on the test dataset.
-        valid_mae = mean_absolute_error(y_valid,y_pred)
+    # Random Forest
+    with mlflow.start_run(
+        run_name="run RF", experiment_id=id_train
+    ):  # delimita inicio y fin del run
+        # aquí comienza el run
+        RF.fit(X_train, y_train)  # train the model
+        y_pred = RF.predict(
+            X_valid
+        )  # Use the model to make predictions on the test dataset.
+        valid_mae = mean_absolute_error(y_valid, y_pred)
         mlflow.log_metric("valid_mae", valid_mae)
         # aquí termina el run
-    #Support Vector Regression
-    with mlflow.start_run(run_name="run SVR", experiment_id=id_train): # delimita inicio y fin del run
-        # aquí comienza el run
-        SVM.fit(X_train, y_train) # train the model
-        y_pred = SVM.predict(X_valid) # Use the model to make predictions on the test dataset.
-        valid_mae = mean_absolute_error(y_valid,y_pred)
+    # Support Vector Regression
+    with mlflow.start_run(
+        run_name="run SVR", experiment_id=id_train
+    ):  # delimita inicio y fin del run
+        # aquí comienza el run
+        SVM.fit(X_train, y_train)  # train the model
+        y_pred = SVM.predict(
+            X_valid
+        )  # Use the model to make predictions on the test dataset.
+        valid_mae = mean_absolute_error(y_valid, y_pred)
         mlflow.log_metric("valid_mae", valid_mae)
         # aquí termina el run
-    #XGBoost Regressor
-    with mlflow.start_run(run_name="run XGB", experiment_id=id_train): # delimita inicio y fin del run
-        # aquí comienza el run
-        XGB.fit(X_train, y_train) # train the model
-        y_pred = XGB.predict(X_valid) # Use the model to make predictions on the test dataset.
-        valid_mae = mean_absolute_error(y_valid,y_pred)
+    # XGBoost Regressor
+    with mlflow.start_run(
+        run_name="run XGB", experiment_id=id_train
+    ):  # delimita inicio y fin del run
+        # aquí comienza el run
+        XGB.fit(X_train, y_train)  # train the model
+        y_pred = XGB.predict(
+            X_valid
+        )  # Use the model to make predictions on the test dataset.
+        valid_mae = mean_absolute_error(y_valid, y_pred)
         mlflow.log_metric("valid_mae", valid_mae)
         # aquí termina el run
-    #Light GBM Regressor
-    with mlflow.start_run(run_name="run LGBMR", experiment_id=id_train): # delimita inicio y fin del run
-        # aquí comienza el run
-        LGBMR.fit(X_train, y_train) # train the model
-        y_pred = LGBMR.predict(X_valid) # Use the model to make predictions on the test dataset.
-        valid_mae = mean_absolute_error(y_valid,y_pred)
+    # Light GBM Regressor
+    with mlflow.start_run(
+        run_name="run LGBMR", experiment_id=id_train
+    ):  # delimita inicio y fin del run
+        # aquí comienza el run
+        LGBMR.fit(X_train, y_train)  # train the model
+        y_pred = LGBMR.predict(
+            X_valid
+        )  # Use the model to make predictions on the test dataset.
+        valid_mae = mean_absolute_error(y_valid, y_pred)
         mlflow.log_metric("valid_mae", valid_mae)
         # aquí termina el run
 
     best_model = get_best_model(id_train)
     return best_model
-    
 
 
 def evaluate_model(model, X_test: pd.DataFrame, y_test: pd.Series):

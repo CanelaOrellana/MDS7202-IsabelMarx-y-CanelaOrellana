@@ -9,26 +9,32 @@ import pandas as pd
 def _is_true(x: pd.Series) -> pd.Series:
     return x == "t"
 
+
 def _parse_percentage(x: pd.Series) -> pd.Series:
     x = x.str.replace("%", "")
     x = x.astype(float) / 100
     return x
+
 
 def _parse_money(x: pd.Series) -> pd.Series:
     x = x.str.replace("$", "").str.replace(",", "")
     x = x.astype(float)
     return x
 
+
 def get_data():
     # TODO: completar get_data()
 
-    companies_url = 'https://raw.githubusercontent.com/MDS7202/lab_11/main/companies.csv'
-    shuttles_url = 'https://raw.githubusercontent.com/MDS7202/lab_11/main/shuttles.xlsx'
-    reviews_url = 'https://raw.githubusercontent.com/MDS7202/lab_11/main/reviews.csv'
+    companies_url = (
+        "https://raw.githubusercontent.com/MDS7202/lab_11/main/companies.csv"
+    )
+    shuttles_url = "https://raw.githubusercontent.com/MDS7202/lab_11/main/shuttles.xlsx"
+    reviews_url = "https://raw.githubusercontent.com/MDS7202/lab_11/main/reviews.csv"
     companies = pd.read_csv(companies_url)
     shuttles = pd.read_excel(shuttles_url)
     reviews = pd.read_csv(reviews_url)
     return companies, shuttles, reviews
+
 
 def preprocess_companies(companies: pd.DataFrame) -> pd.DataFrame:
     """Preprocesses the data for companies.
@@ -43,6 +49,7 @@ def preprocess_companies(companies: pd.DataFrame) -> pd.DataFrame:
     companies["company_rating"] = _parse_percentage(companies["company_rating"])
     return companies
 
+
 def preprocess_shuttles(shuttles: pd.DataFrame) -> pd.DataFrame:
     """Preprocesses the data for shuttles.
 
@@ -56,6 +63,7 @@ def preprocess_shuttles(shuttles: pd.DataFrame) -> pd.DataFrame:
     shuttles["moon_clearance_complete"] = _is_true(shuttles["moon_clearance_complete"])
     shuttles["price"] = _parse_money(shuttles["price"])
     return shuttles
+
 
 def create_model_input_table(
     shuttles: pd.DataFrame, companies: pd.DataFrame, reviews: pd.DataFrame
@@ -93,4 +101,3 @@ def create_model_input_table(
     model_input_table = model_input_table[features]
 
     return model_input_table
-
