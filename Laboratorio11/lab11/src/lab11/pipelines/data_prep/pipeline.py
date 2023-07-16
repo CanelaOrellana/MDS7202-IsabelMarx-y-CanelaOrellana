@@ -4,14 +4,34 @@ generated using Kedro 0.18.11
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from data_prep.nodes import get_data, preprocess_companies, preprocess_shuttles, create_model_input_table
+from .nodes import get_data, preprocess_companies, preprocess_shuttles, create_model_input_table
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
         [
-            node(get_data, None, ["companies", "shuttles", "reviews"], name="get_data_node"),
-            node(preprocess_companies, "companies", "companies", name="companies_node"),
-            node(preprocess_shuttles, "shuttles", "shuttles", name="shuttles_node"),
-            node(create_model_input_table, ["shuttles", "companies", "reviews"], "model_input_table", name="create_model_input_table_node")
+            node(
+                func=get_data,
+                inputs=None,
+                outputs=['companies', 'shuttles', 'reviews'],
+                name="obtener_datos",
+            ),
+            node(
+                func=preprocess_companies,
+                inputs="companies",
+                outputs="prep_companies",
+                name="preprocesar_companies",
+            ),
+            node(
+                func=preprocess_shuttles,
+                inputs="shuttles",
+                outputs="prep_shuttles",
+                name="preprocesar_shuttles",
+            ),
+            node(
+                func=create_model_input_table,
+                inputs=['prep_shuttles', "prep_companies", 'reviews'],
+                outputs="model_input_table",
+                name="crear_model_input_table",
+            )
         ]
-        )
+    )

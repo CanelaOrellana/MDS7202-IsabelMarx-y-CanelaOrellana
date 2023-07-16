@@ -3,17 +3,62 @@
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://docs.kedro.org/en/stable/data/data_catalog.html
 
-get_data_node:
+#obtener datos
+companies:
   type: pandas.ParquetDataSet
-  filepath: ./data/01_raw/data.parquet
+  filepath: ./data/01_raw/companies.parquet
 
-companies_node:
+shuttles:
   type: pandas.ParquetDataSet
-  filepath: ./data/02_intermediate/data.parquet
+  filepath: ./data/01_raw/shuttles.parquet
 
-shuttles_node:
+reviews:
   type: pandas.ParquetDataSet
-  filepath: ./data/03_primary/data.parquet
+  filepath: ./data/01_raw/reviews.parquet
+
+#preprocesar datos
+prep_companies:
+  type: pandas.ParquetDataSet
+  filepath: ./data/02_intermediate/prep_companies.parquet
+
+prep_shuttles:
+  type: pandas.ParquetDataSet
+  filepath: ./data/02_intermediate/prep_shuttles.parquet
+
+#model input table
+model_input_table:
+  type: pandas.ParquetDataSet
+  filepath: ./data/03_primary/model_input_table.parquet
+
+#separar data
+X_train:
+  type: pandas.ParquetDataSet
+  filepath: ./data/05_model_input/X_train.parquet
+
+X_valid:
+  type: pandas.ParquetDataSet
+  filepath: ./data/05_model_input/X_valid.parquet
+
+X_test:
+  type: pandas.ParquetDataSet
+  filepath: ./data/05_model_input/X_test.parquet
+
+y_train:
+  type: pandas.ParquetDataSet
+  filepath: ./data/05_model_input/y_train.parquet
+
+y_valid:
+  type: pandas.ParquetDataSet
+  filepath: ./data/05_model_input/y_valid.parquet
+
+y_test:
+  type: pandas.ParquetDataSet
+  filepath: ./data/05_model_input/y_test.parquet
+
+#Mejor modelo
+best_model:
+  type: pickle.PickleDataSet
+  filepath: ./data/06_models/y_test.pickle
 
 
   

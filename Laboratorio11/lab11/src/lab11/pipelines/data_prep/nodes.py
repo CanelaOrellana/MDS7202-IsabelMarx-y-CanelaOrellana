@@ -4,7 +4,7 @@ generated using Kedro 0.18.11
 """
 
 import pandas as pd
-import requests
+
 
 def _is_true(x: pd.Series) -> pd.Series:
     return x == "t"
@@ -25,9 +25,9 @@ def get_data():
     companies_url = 'https://raw.githubusercontent.com/MDS7202/lab_11/main/companies.csv'
     shuttles_url = 'https://raw.githubusercontent.com/MDS7202/lab_11/main/shuttles.xlsx'
     reviews_url = 'https://raw.githubusercontent.com/MDS7202/lab_11/main/reviews.csv'
-    companies = requests.get(companies_url)
-    shuttles = requests.get(shuttles_url)
-    reviews = requests.get(reviews_url)
+    companies = pd.read_csv(companies_url)
+    shuttles = pd.read_excel(shuttles_url)
+    reviews = pd.read_csv(reviews_url)
     return companies, shuttles, reviews
 
 def preprocess_companies(companies: pd.DataFrame) -> pd.DataFrame:
