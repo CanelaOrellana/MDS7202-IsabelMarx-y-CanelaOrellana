@@ -1,0 +1,11 @@
+digest: e2482483
+name: dataset
+profile: '{"num_rows": 8000, "num_elements": 64000}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "engines"}, {"type": "long",
+  "name": "passenger_capacity"}, {"type": "double", "name": "crew"}, {"type": "boolean",
+  "name": "d_check_complete"}, {"type": "boolean", "name": "moon_clearance_complete"},
+  {"type": "boolean", "name": "iata_approved"}, {"type": "double", "name": "company_rating"},
+  {"type": "double", "name": "review_scores_rating"}]}'
+source: '{"tags": {"mlflow.user": "maxim", "mlflow.source.name": "C:\\Users\\maxim\\anaconda3\\envs\\kedro-environment\\Scripts\\kedro",
+  "mlflow.source.type": "LOCAL"}}'
+source_type: code

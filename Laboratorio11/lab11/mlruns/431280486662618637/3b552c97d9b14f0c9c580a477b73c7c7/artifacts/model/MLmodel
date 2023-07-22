@@ -1,0 +1,25 @@
+artifact_path: model
+flavors:
+  lightgbm:
+    code: null
+    data: model.pkl
+    lgb_version: 4.0.0
+    model_class: lightgbm.sklearn.LGBMRegressor
+  python_function:
+    data: model.pkl
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.lightgbm
+    python_version: 3.10.12
+mlflow_version: 2.4.2
+model_uuid: 5881dde37ace4f47bebebe29b3afb0eb
+run_id: 3b552c97d9b14f0c9c580a477b73c7c7
+signature:
+  inputs: '[{"type": "double", "name": "engines"}, {"type": "long", "name": "passenger_capacity"},
+    {"type": "double", "name": "crew"}, {"type": "boolean", "name": "d_check_complete"},
+    {"type": "boolean", "name": "moon_clearance_complete"}, {"type": "boolean", "name":
+    "iata_approved"}, {"type": "double", "name": "company_rating"}, {"type": "double",
+    "name": "review_scores_rating"}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float64", "shape": [-1]}}]'
+utc_time_created: '2023-07-16 04:45:09.629024'
